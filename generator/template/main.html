@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>闹钟 - 极简时间管理</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "error": "#ba1a1a",
+                    "outline-variant": "#c7c4d8",
+                    "surface-bright": "#f7f9fb",
+                    "tertiary": "#7e3000",
+                    "primary": "#3525cd",
+                    "secondary": "#565e74",
+                    "on-secondary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "tertiary-container": "#a44100",
+                    "background": "#f7f9fb",
+                    "surface-container-low": "#f2f4f6",
+                    "on-primary-fixed": "#0f0069",
+                    "on-tertiary-fixed": "#351000",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary-container": "#dad7ff",
+                    "surface-dim": "#d8dadc",
+                    "surface-container-highest": "#e0e3e5",
+                    "on-secondary-fixed": "#131b2e",
+                    "surface-container": "#eceef0",
+                    "surface-variant": "#e0e3e5",
+                    "secondary-container": "#dae2fd",
+                    "secondary-fixed": "#dae2fd",
+                    "tertiary-fixed": "#ffdbcc",
+                    "on-primary": "#ffffff",
+                    "primary-fixed": "#e2dfff",
+                    "inverse-primary": "#c3c0ff",
+                    "primary-fixed-dim": "#c3c0ff",
+                    "on-secondary-fixed-variant": "#3f465c",
+                    "on-secondary-container": "#5c647a",
+                    "inverse-surface": "#2d3133",
+                    "on-background": "#191c1e",
+                    "on-surface": "#191c1e",
+                    "on-tertiary-container": "#ffd2be",
+                    "inverse-on-surface": "#eff1f3",
+                    "surface-container-high": "#e6e8ea",
+                    "surface-tint": "#4d44e3",
+                    "surface": "#f7f9fb",
+                    "secondary-fixed-dim": "#bec6e0",
+                    "on-primary-fixed-variant": "#3323cc",
+                    "tertiary-fixed-dim": "#ffb695",
+                    "on-tertiary-fixed-variant": "#7b2f00",
+                    "on-error-container": "#93000a",
+                    "outline": "#777587",
+                    "error-container": "#ffdad6",
+                    "on-surface-variant": "#464555",
+                    "primary-container": "#4f46e5",
+                    "on-tertiary": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "touch-target": "48px",
+                    "card-padding": "24px",
+                    "stack-gap": "16px",
+                    "section-gap": "32px",
+                    "container-margin": "20px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "display-time": ["Inter"],
+                    "display-time-mobile": ["Inter"]
+            },
+            "fontSize": {
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "600"}],
+                    "display-time": ["80px", {"lineHeight": "96px", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+                    "display-time-mobile": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.04em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #F8FAFC;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        .toggle-checked .toggle-thumb {
+            transform: translateX(20px);
+        }
+        .alarm-card {
+            transition: transform 0.2s ease, opacity 0.3s ease;
+        }
+        .alarm-card:active {
+            transform: scale(0.98);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md text-on-surface selection:bg-secondary-container">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-background dark:bg-on-background flex justify-between items-center px-container-margin h-touch-target">
+<h1 class="font-headline-md text-headline-md-mobile text-on-surface dark:text-on-surface-variant font-extrabold tracking-tight">闹钟</h1>
+<button class="transition-colors duration-200 active:opacity-70 hover:bg-surface-container-high dark:hover:bg-surface-container-lowest p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary dark:text-inverse-primary" data-icon="add">add</span>
+</button>
+</header>
+<!-- Main Content Area -->
+<main class="pt-20 pb-24 px-container-margin min-h-screen">
+<!-- Greeting / Status Section -->
+<section class="mb-section-gap">
+<p class="font-label-md text-label-md text-on-surface-variant">下一个闹钟 07:30</p>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile mt-1 text-on-surface">开启美好的一天</h2>
+</section>
+<!-- Alarm List -->
+<div class="flex flex-col gap-stack-gap">
+<!-- Active Alarm Card 1 -->
+<div class="alarm-card bg-surface-container-lowest p-card-padding rounded-xl shadow-[0_4px_12px_rgba(79,70,229,0.04)] flex justify-between items-center border border-surface-container">
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-1">
+<span class="font-label-md text-label-md text-on-surface-variant">起床闹钟</span>
+</div>
+<div class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface leading-none">07:30</div>
+<div class="font-label-sm text-label-sm text-on-secondary-fixed-variant mt-2">周一, 周二, 周三, 周四, 周五</div>
+</div>
+<div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-container"></div>
+</label>
+</div>
+</div>
+<!-- Active Alarm Card 2 -->
+<div class="alarm-card bg-surface-container-lowest p-card-padding rounded-xl shadow-[0_4px_12px_rgba(79,70,229,0.04)] flex justify-between items-center border border-surface-container">
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-1">
+<span class="font-label-md text-label-md text-on-surface-variant">午休</span>
+</div>
+<div class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface leading-none">13:00</div>
+<div class="font-label-sm text-label-sm text-on-secondary-fixed-variant mt-2">每天</div>
+</div>
+<div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-container"></div>
+</label>
+</div>
+</div>
+<!-- Inactive Alarm Card -->
+<div class="alarm-card bg-surface-container-low opacity-60 p-card-padding rounded-xl flex justify-between items-center border border-surface-container">
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-1">
+<span class="font-label-md text-label-md text-on-surface-variant">健身</span>
+</div>
+<div class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface leading-none">18:30</div>
+<div class="font-label-sm text-label-sm text-on-secondary-fixed-variant mt-2">周二, 周四</div>
+</div>
+<div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-container"></div>
+</label>
+</div>
+</div>
+<!-- Empty State Visualization -->
+<div class="mt-section-gap flex flex-col items-center justify-center opacity-40 py-8">
+<div class="w-full h-48 rounded-2xl overflow-hidden relative mb-4">
+<img class="w-full h-full object-cover grayscale opacity-20" data-alt="A minimalist 3D rendering of a soft blue alarm clock floating in a clean, white, airy space. The lighting is bright and ethereal, reflecting a modern light-mode design system. The scene is calm and uncluttered, emphasizing whitespace and a sense of peaceful morning reliability." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFKckVUAPsOzFy546HtFMeDBbtlVNmjtCrBn8mLd5iz9VYbu30xNu46FXzK4rUdFV2CEPolu6D4PzhhZ-jQ6ldJxvxxAe5v4jQH1KFUnam-JuwbUfcKJ67Cq-Ydvv7qpFfJz059mFTNjMmknU0aPkUZNITBPc1oNoU5yZ5BXLn94SfhKEFs-bm5YDOKZfcfpDa53IBX2YJi8RggTowPX_eBGxNPCUgT3Z5PooXu57q5-q6qyp8snyjjW3dL_n85kQ1m3aElOQxQas"/>
+</div>
+<p class="font-label-md text-label-md text-center">添加更多闹钟来保持高效</p>
+</div>
+</div>
+</main>
+<!-- FAB (Floating Action Button) - Rendered only on Home/Alarm main screen -->
+<button class="fixed bottom-24 right-6 w-14 h-14 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center active:scale-95 transition-transform z-50">
+<span class="material-symbols-outlined text-[28px]" data-icon="add">add</span>
+</button>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center h-16 px-container-margin pb-safe bg-surface dark:bg-surface-dim shadow-[0_-1px_3px_rgba(0,0,0,0.04)] z-50">
+<!-- Tab: 日程 -->
+<a class="flex flex-col items-center justify-center text-on-secondary-fixed-variant dark:text-outline-variant hover:bg-surface-container-high transition-all active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="font-label-sm text-label-sm">日程</span>
+</a>
+<!-- Tab: 闹钟 (Active) -->
+<a class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed-dim bg-secondary-container dark:bg-on-secondary-fixed-variant rounded-full px-6 py-1 transition-all active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="alarm" style="font-variation-settings: 'FILL' 1;">alarm</span>
+<span class="font-label-sm text-label-sm">闹钟</span>
+</a>
+<!-- Tab: 我的 -->
+<a class="flex flex-col items-center justify-center text-on-secondary-fixed-variant dark:text-outline-variant hover:bg-surface-container-high transition-all active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">我的</span>
+</a>
+</nav>
+<!-- Micro-interactions Script -->
+<script>
+        document.querySelectorAll('input[type="checkbox"]').forEach(toggle => {
+            toggle.addEventListener('change', function() {
+                const card = this.closest('.alarm-card');
+                if (this.checked) {
+                    card.classList.remove('opacity-60', 'bg-surface-container-low');
+                    card.classList.add('bg-surface-container-lowest', 'shadow-[0_4px_12px_rgba(79,70,229,0.04)]');
+                } else {
+                    card.classList.add('opacity-60', 'bg-surface-container-low');
+                    card.classList.remove('bg-surface-container-lowest', 'shadow-[0_4px_12px_rgba(79,70,229,0.04)]');
+                }
+            });
+        });
+
+        // Simple haptic-like scale effect on click for alarm items
+        document.querySelectorAll('.alarm-card').forEach(card => {
+            card.addEventListener('mousedown', () => card.style.transform = 'scale(0.98)');
+            card.addEventListener('mouseup', () => card.style.transform = 'scale(1)');
+            card.addEventListener('mouseleave', () => card.style.transform = 'scale(1)');
+        });
+    </script>
+</body></html>
